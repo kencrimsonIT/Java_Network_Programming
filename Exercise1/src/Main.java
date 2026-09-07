@@ -1,13 +1,50 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+import java.io.File;
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+public class Main {
+    public static boolean delete(String path) {
+        File file = new File(path);
+
+        if (!file.exists()) return false;
+        if (file.isDirectory()) {
+            File[] childFiles = file.listFiles();
+            if (childFiles != null) {
+                for (File child : childFiles) {
+                    if (!delete(child.getAbsolutePath())) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return file.delete();
+    }
+
+    public static void findAllByExts(String path, String ext) {
+        File dir = new File(path);
+        File[] files = dir.listFiles();
+
+        if (files == null) {
+            return;
+        }
+
+        for (File f : files) {
+            if (f.isDirectory()) {
+                findAllByExts(f.getAbsolutePath(), ext);
+            } else if (f.isFile()) {
+                if (f.getName().toLowerCase().endsWith("." + ext.toLowerCase())) {
+                    System.out.println(f.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String path = "D:\\Documents\\Nhập môn Cơ sở dữ liệu";
+
+        /*boolean result = delete(path);
+        System.out.println(result);*/
+
+        /*String etx = "pdf";
+        findAllByExts(path, etx);*/
     }
 }
